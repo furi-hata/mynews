@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 // 以下を追記することでProfile Modelが扱えるようになる
 use App\Profile;
 
+// 4-19以下を追記
+use App\Background;
+use Carbon\Carbon;
+
 class ProfileController extends Controller
 {
   public function add()
@@ -54,6 +58,12 @@ class ProfileController extends Controller
 
     // 該当するデータを上書きして保存する
     $profile->fill($profile_form)->save();
+
+    // 4-19追記
+    $background = new Background;
+    $background->profile_id = $profile->id;
+    $background->edited_at = Carbon::now();
+    $background->save();
 
     return redirect('admin/profile');
   }
